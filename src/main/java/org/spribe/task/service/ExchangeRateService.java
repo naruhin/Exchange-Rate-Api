@@ -5,6 +5,7 @@ import org.spribe.task.domain.Currency;
 import org.spribe.task.domain.ExchangeRate;
 import org.spribe.task.repository.CurrencyRepository;
 import org.spribe.task.repository.ExchangeRateRepository;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class ExchangeRateService extends AbstractCrudService<ExchangeRate, UUID>
         this.apiClient = apiClient;
     }
 
+    @Scheduled(fixedRateString = "${app.scheduler.fixed-rate}")
     public void updateExchangeRates() {
         List<Currency> currencies = currencyRepository.findAll();
         if (!currencies.isEmpty()) {
