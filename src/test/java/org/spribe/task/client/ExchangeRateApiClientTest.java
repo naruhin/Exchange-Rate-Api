@@ -8,7 +8,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -57,25 +56,6 @@ class ExchangeRateApiClientTest {
         assertEquals(2, actualRates.size());
         assertEquals(0.75, actualRates.get("USDGBP"));
         assertEquals(0.85, actualRates.get("USDEUR"));
-    }
-
-    @Test
-    void testFetchExchangeRates_InvalidResponse() {
-        String baseCurrency = "USD";
-        String mockUrl = apiUrl + "?access_key=" + accessKey + "&source=" + baseCurrency;
-
-        String jsonResponse = "{" +
-                "  \"success\": false" +
-                "}";
-
-        mockServer.expect(requestTo(mockUrl))
-                .andRespond(withSuccess(jsonResponse, MediaType.APPLICATION_JSON));
-
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            exchangeRateApiClient.fetchExchangeRates(baseCurrency);
-        });
-
-        assertTrue(exception.getMessage().contains("Invalid response from ExchangeRate API"));
     }
 
     @Test

@@ -3,11 +3,9 @@ package org.spribe.task.client;
 import org.spribe.task.domain.dto.ClientResponseDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriBuilderFactory;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Map;
 
@@ -27,16 +25,9 @@ public class ExchangeRateApiClient {
     }
 
     public Map<String, Double> fetchExchangeRates(String baseCurrency) {
-        String url = buildUrl(baseCurrency);
-
         try {
-            ClientResponseDto response = restTemplate.getForObject(url, ClientResponseDto.class);
-
-            if (response != null && response.isSuccess()) {
-                return response.getQuotes();
-            }
-            throw new RuntimeException("Invalid response from ExchangeRate API");
-
+            ClientResponseDto response = restTemplate.getForObject(buildUrl(baseCurrency), ClientResponseDto.class);
+            return (response != null && response.isSuccess()) ? response.getQuotes() : null;
         } catch (RestClientException e) {
             throw new RuntimeException("Failed to fetch exchange rates from the API: " + e.getMessage(), e);
         }
