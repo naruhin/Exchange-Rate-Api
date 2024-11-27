@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: SPRIBE-test-task
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop # Automatically creates and drops the schema for each test
+  liquibase:
+    enabled: false # Disable Liquibase for tests, as H2 schema is created on the fly
+
+app:
+  api:
+    url: http://mockapi.com/api/live
+    access-key: testAccessKey
+  scheduler:
+    fixed-rate: 3600000 # 60 minutes
+    #    fixed-rate: 60000 # 60 seconds
